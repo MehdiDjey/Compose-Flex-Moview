@@ -1,6 +1,7 @@
 package com.druide.flexmovies.data.repository
 
 import com.druide.flexmovies.data.remote.MoviesService
+import com.druide.flexmovies.domain.model.Movie
 import com.druide.flexmovies.domain.model.Movies
 import com.druide.flexmovies.domain.movies.MoviesRepository
 import com.skydoves.sandwich.ApiResponse
@@ -15,9 +16,21 @@ class MoviesRepositoryImpl @Inject constructor(
 ) : MoviesRepository {
 
 
-    override suspend fun getMovies(pageIndex: Int): ApiResponse<Movies> {
+    override suspend fun getPopularMovies(): ApiResponse<Movies> {
         return withContext(dispatcher) {
-            moviesService.getPopularMovies(pageIndex)
+            moviesService.getPopularMovies()
+        }
+    }
+
+    override suspend fun getAllMovies(page: Int) : ApiResponse<Movies> {
+      return withContext(dispatcher) {
+          moviesService.getAllMovies(page)
+      }
+    }
+
+    override suspend fun getMovie(idMovie: Int): ApiResponse<Movie> {
+        return withContext(dispatcher) {
+            moviesService.getMovieById(idMovie)
         }
     }
 }

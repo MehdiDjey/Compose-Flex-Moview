@@ -1,9 +1,9 @@
 package com.druide.flexmovies.di
 
-import com.druide.flexmovies.domain.movie.MovieRepository
-import com.druide.flexmovies.domain.movie.MovieUseCase
 import com.druide.flexmovies.domain.movies.MoviesRepository
 import com.druide.flexmovies.domain.movies.MoviesUseCase
+import com.druide.flexmovies.domain.tvShow.TvShowRepository
+import com.druide.flexmovies.domain.tvShow.TvShowUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,9 +17,9 @@ class UseCaseModule {
 
     @Provides
     @Singleton
-    fun provideMovieUseCase(movieRepository: MovieRepository) = MovieUseCase(movieRepository)
+    fun MoviesRepository.provideMoviesUseCase() = MoviesUseCase(this)
 
     @Provides
     @Singleton
-    fun provideMoviesUseCase(moviesRepository: MoviesRepository) = MoviesUseCase(moviesRepository)
+    fun TvShowRepository.provideTvShowUseCase() = TvShowUseCase(this)
 }

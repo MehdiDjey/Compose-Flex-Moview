@@ -1,40 +1,41 @@
 package com.druide.flexmovies.presentation.home
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.druide.flexmovies.TAG
 import com.druide.flexmovies.common.Resource
-import com.druide.flexmovies.domain.model.Movies
-import com.druide.flexmovies.domain.model.Results
 import com.druide.flexmovies.domain.movies.MoviesUseCase
+import com.druide.flexmovies.domain.tvShow.TvShowUseCase
 import com.skydoves.sandwich.message
 import com.skydoves.sandwich.onError
 import com.skydoves.sandwich.onException
 import com.skydoves.sandwich.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MoviesViewModel  @Inject constructor( private val  moviesUseCase: MoviesUseCase) : ViewModel() {
+class MoviesViewModel @Inject constructor(private val moviesUseCase: MoviesUseCase, private val tvShowUseCase: TvShowUseCase) : ViewModel() {
 
-    private var _moviesState: MutableLiveData<Resource<Movies>> = MutableLiveData()
-    val moviesState: LiveData<Resource<Movies>> = _moviesState
+    private val _moviesState = MutableStateFlow<Resource>(Resource.Empty)
+    val moviesState: StateFlow<Resource> = _moviesState
 
 
-    /**
-     * Get movie according to the selected page
-     *
-     * @param pageIndex Int by default the value should be 1
-     */
-    fun getMovieAtPage(pageIndex: Int) {
-        _moviesState.postValue(Resource.Loading())
+    private val _tvShowState = MutableStateFlow<Resource>(Resource.Empty)
+    val tvShowState: StateFlow<Resource> = _tvShowState
+
+
+    fun getPopularMovies() {
+        _moviesState.value = Resource.Loading
+
         viewModelScope.launch {
-            val response = moviesUseCase.getPopularMovies(pageIndex)
+            val response = moviesUseCase.getMoviesByPopularity()
 
             response.onSuccess {
-                if  ( this.statusCode.code == 200 && this.response.isSuccessful) {
+                if (this.statusCode.code == 200 && this.response.isSuccessful) {
                     _moviesState.value = Resource.Success(data)
                 }
             }
@@ -44,6 +45,28 @@ class MoviesViewModel  @Inject constructor( private val  moviesUseCase: MoviesUs
 
             response.onException {
                 _moviesState.value = Resource.Error(this.message())
+            }
+        }
+    }
+
+    fun getPopularTvShow() {
+        _tvShowState.value = Resource.Loading
+
+        viewModelScope.launch {
+            val response = tvShowUseCase.getTvShowByPopularity()
+
+            Log.d(TAG, "getPopularTvShow() called"+response)
+            response.onSuccess {
+                if (this.statusCode.code == 200 && this.response.isSuccessful) {
+                    _tvShowState.value = Resource.Success(data)
+                }
+            }
+            response.onError {
+                _tvShowState.value = Resource.Error(this.message())
+            }
+
+            response.onException {
+                _tvShowState.value = Resource.Error(this.message())
             }
         }
     }

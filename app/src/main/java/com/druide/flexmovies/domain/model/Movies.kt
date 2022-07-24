@@ -28,7 +28,7 @@ data class Movies(
 @Parcelize
 @Serializable
 data class Results(
-    @SerialName("adult") val adult: Boolean,
+    @SerialName("adult") val adult: Boolean?= null,
 
     @SerialName("backdrop_path") val backdropPath: String?,
 
@@ -38,23 +38,27 @@ data class Results(
 
     @SerialName("original_language") val originalLanguage: String,
 
-    @SerialName("original_title") val originalTitle: String,
+    @SerialName("original_title") val originalTitle: String? = null,
 
     @SerialName("overview") val overview: String,
 
     @SerialName("popularity") val popularity: Double,
 
-    @SerialName("poster_path") val posterPath: String?,
+    @SerialName("poster_path") val posterPath: String?= null,
 
-    @SerialName("release_date") val releaseDate: String = "Unknown release date",
+    @SerialName("release_date") val releaseDate: String? = null,
 
-    @SerialName("title") val title: String,
+    @SerialName("title") val title: String? = null,
 
-    @SerialName("video") val video: Boolean,
+    @SerialName("video") val video: Boolean?= null,
 
     @SerialName("vote_average") val voteAverage: Double,
 
-    @SerialName("vote_count") val voteCount: Int
+    @SerialName("vote_count") val voteCount: Int,
+
+   @SerialName("original_name") val originalName : String?  = null,
+
+   @SerialName("name") val name : String?  = null,
 
 ) : Parcelable {
     override fun toString(): String {

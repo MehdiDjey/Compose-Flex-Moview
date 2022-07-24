@@ -8,19 +8,18 @@ import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface MoviesService {
+interface TvShowService {
 
     @Headers("Accept: application/json")
-    @GET("discover/movie")
-    suspend fun getPopularMovies(): ApiResponse<Movies>
+    @GET("discover/tv")
+    suspend fun getPopularTvShow() : ApiResponse<Movies>
 
 
     @Headers("Accept: application/json")
-    @GET("discover/movie")
-    suspend fun getAllMovies(@Query("page") page: Int): ApiResponse<Movies>
+    @GET("discover/tv")
+    suspend fun getAllTvShow(@Query("page") page: Int): ApiResponse<Movies>
 
     @Headers("Accept: application/json")
-    @GET("movie/{idMovie}")
-    suspend fun getMovieById(@Path("idMovie") idMovie: Int): ApiResponse<Movie>
-
+    @GET("tv/{idMovie}")
+    suspend fun getTvShowById(@Path("idMovie") idMovie: Int): ApiResponse<Movie>
 }
