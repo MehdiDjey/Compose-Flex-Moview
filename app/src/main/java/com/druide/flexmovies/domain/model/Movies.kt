@@ -20,7 +20,7 @@ data class Movies(
 
 ) : Parcelable {
     override fun toString(): String {
-        return Json.encodeToString(this)
+        return Json{ignoreUnknownKeys = true}.encodeToString(this)
     }
 }
 
@@ -62,7 +62,7 @@ data class Results(
 
 ) : Parcelable {
     override fun toString(): String {
-        return Json.encodeToString(this)
+        return Json{ignoreUnknownKeys = true}.encodeToString(this)
     }
 
 }

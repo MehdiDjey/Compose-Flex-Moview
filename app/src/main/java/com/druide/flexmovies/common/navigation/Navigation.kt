@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.druide.flexmovies.presentation.details.MovieDetailScreen
+import com.druide.flexmovies.presentation.details.MovieDetailViewModel
 import com.druide.flexmovies.presentation.home.HomeScreen
 import com.druide.flexmovies.presentation.home.MoviesViewModel
 
@@ -29,7 +30,8 @@ fun Navigation() {
                 type = NavType.IntType
             })
         ) { entry ->
-            MovieDetailScreen(navController, entry.arguments?.getInt("idMovie"))
+            val movieDetailViewModel = hiltViewModel<MovieDetailViewModel>()
+            MovieDetailScreen(navController, entry.arguments?.getInt("idMovie"),movieDetailViewModel)
         }
     }
 

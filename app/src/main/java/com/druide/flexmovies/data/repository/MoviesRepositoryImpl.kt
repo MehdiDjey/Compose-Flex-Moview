@@ -1,9 +1,11 @@
 package com.druide.flexmovies.data.repository
 
+import android.util.Log
 import com.druide.flexmovies.data.remote.MoviesService
+import com.druide.flexmovies.domain.model.Credit
 import com.druide.flexmovies.domain.model.Movie
 import com.druide.flexmovies.domain.model.Movies
-import com.druide.flexmovies.domain.movies.MoviesRepository
+import com.druide.flexmovies.domain.movies. MoviesRepository
 import com.skydoves.sandwich.ApiResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +33,17 @@ class MoviesRepositoryImpl @Inject constructor(
     override suspend fun getMovie(idMovie: Int): ApiResponse<Movie> {
         return withContext(dispatcher) {
             moviesService.getMovieById(idMovie)
+        }
+    }
+
+    override suspend fun getCredit(idMovie: Int): ApiResponse<Credit> {
+        return  withContext(dispatcher) {
+            val dsqd = moviesService.getMovieCredit(idMovie)
+
+            Log.d("TAG", "getCredit() called"+dsqd)
+
+            return@withContext dsqd
+
         }
     }
 }

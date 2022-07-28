@@ -21,6 +21,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
@@ -133,7 +134,7 @@ fun ItemMovieCard(movie: Results, onItemClicked: (movie: Results) -> Unit) {
     ) {
         Column(
             modifier = Modifier
-                .width(150.dp)
+                .width(130.dp)
                 .wrapContentSize()
         ) {
             AsyncImage(
@@ -143,13 +144,14 @@ fun ItemMovieCard(movie: Results, onItemClicked: (movie: Results) -> Unit) {
                 contentScale = ContentScale.Fit,
             )
 
-            ExtraSmallSpacer()
+
             Text(
                 text = (movie.title ?: movie.name)!!, style = MaterialTheme.typography.caption,
                 color = MaterialTheme.colors.surface,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(4.dp, 0.dp, 4.dp, 0.dp),
-
+                modifier = Modifier.padding(6.dp),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
                 )
             ExtraSmallSpacer()
         }

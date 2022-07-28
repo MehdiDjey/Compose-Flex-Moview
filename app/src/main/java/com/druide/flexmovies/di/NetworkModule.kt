@@ -4,13 +4,15 @@ import com.druide.flexmovies.BuildConfig
 import com.druide.flexmovies.common.Constant.API_KEY
 import com.druide.flexmovies.common.Constant.BASE_URL
 import com.druide.flexmovies.common.Keys
-import com.druide.flexmovies.common.Utils.json
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.skydoves.sandwich.adapters.ApiResponseCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -55,14 +57,18 @@ object NetworkModule {
 
     @Singleton
     @Provides
+    @ExperimentalSerializationApi
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
     ): Retrofit {
+        val contentType = "application/json".toMediaType()
+
+        val converterFactory = Json{ignoreUnknownKeys = true}.asConverterFactory(contentType)
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(converterFactory)
             .addCallAdapterFactory(ApiResponseCallAdapterFactory.create())
             .build()
     }
