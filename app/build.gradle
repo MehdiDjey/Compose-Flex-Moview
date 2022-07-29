@@ -119,5 +119,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.1.0")
 
 
+    implementation 'androidx.compose.material3:material3:1.0.0-alpha15'
+
     implementation "com.google.accompanist:accompanist-navigation-animation:0.16.0"
 }
