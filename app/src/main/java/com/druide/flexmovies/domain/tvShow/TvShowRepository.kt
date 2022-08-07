@@ -6,7 +6,7 @@ import com.skydoves.sandwich.ApiResponse
 
 interface TvShowRepository {
 
-    suspend fun getPopularsTvShow(): ApiResponse<Movies>
+    suspend fun getPopularsTvShow(page : Int): ApiResponse<Movies>
 
     suspend fun getAllTvShow(page: Int) : ApiResponse<Movies>
 

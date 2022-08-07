@@ -1,6 +1,7 @@
 package com.druide.flexmovies.domain.model
 
 import android.os.Parcelable
+import com.druide.flexmovies.common.Utils.json
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -20,7 +21,7 @@ data class Movies(
 
 ) : Parcelable {
     override fun toString(): String {
-        return Json{ignoreUnknownKeys = true}.encodeToString(this)
+        return json.encodeToString(this)
     }
 }
 
@@ -62,7 +63,7 @@ data class Results(
 
 ) : Parcelable {
     override fun toString(): String {
-        return Json{ignoreUnknownKeys = true}.encodeToString(this)
+        return json.encodeToString(this)
     }
 
 }

@@ -11,13 +11,8 @@ import retrofit2.http.Query
 interface TvShowService {
 
     @Headers("Accept: application/json")
-    @GET("discover/tv")
-    suspend fun getPopularTvShow() : ApiResponse<Movies>
-
-
-    @Headers("Accept: application/json")
-    @GET("discover/tv")
-    suspend fun getAllTvShow(@Query("page") page: Int): ApiResponse<Movies>
+    @GET("tv/popular")
+    suspend fun getPopularTvShow(@Query("page") page: Int) : ApiResponse<Movies>
 
     @Headers("Accept: application/json")
     @GET("tv/{idMovie}")

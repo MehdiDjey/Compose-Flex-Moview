@@ -1,11 +1,10 @@
 package com.druide.flexmovies.data.repository
 
-import android.util.Log
-import com.druide.flexmovies.data.remote.MoviesService
+import com.druide.flexmovies.data.remote.MoviesServiceRequest
 import com.druide.flexmovies.domain.model.Credit
 import com.druide.flexmovies.domain.model.Movie
 import com.druide.flexmovies.domain.model.Movies
-import com.druide.flexmovies.domain.movies. MoviesRepository
+import com.druide.flexmovies.domain.movies.MoviesRepository
 import com.skydoves.sandwich.ApiResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -13,37 +12,55 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class MoviesRepositoryImpl @Inject constructor(
-    private val moviesService: MoviesService,
+    private val moviesServiceRequest: MoviesServiceRequest,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MoviesRepository {
 
-
-    override suspend fun getPopularMovies(): ApiResponse<Movies> {
+    override suspend fun getPopularMovies(page : Int): ApiResponse<Movies> {
         return withContext(dispatcher) {
-            moviesService.getPopularMovies()
+            moviesServiceRequest.getPopularMovies(page)
         }
     }
 
-    override suspend fun getAllMovies(page: Int) : ApiResponse<Movies> {
-      return withContext(dispatcher) {
-          moviesService.getAllMovies(page)
-      }
-    }
-
-    override suspend fun getMovie(idMovie: Int): ApiResponse<Movie> {
+    override suspend fun getDetailsMovie(idMovie: Int): ApiResponse<Movie> {
         return withContext(dispatcher) {
-            moviesService.getMovieById(idMovie)
+            moviesServiceRequest.getMovieById(idMovie)
         }
     }
 
-    override suspend fun getCredit(idMovie: Int): ApiResponse<Credit> {
+    override suspend fun getCreditMovie(idMovie: Int): ApiResponse<Credit> {
         return  withContext(dispatcher) {
-            val dsqd = moviesService.getMovieCredit(idMovie)
+             moviesServiceRequest.getCreditMovie(idMovie)
+        }
+    }
 
-            Log.d("TAG", "getCredit() called"+dsqd)
+    override suspend fun getSimilarMovies(idMovie: Int): ApiResponse<Movies> {
+       return  withContext(dispatcher) {
+           moviesServiceRequest.getSimilarMovies(idMovie)
+       }
+    }
 
-            return@withContext dsqd
+    override suspend fun getLatestMovies(): ApiResponse<Movies> {
+       return withContext(dispatcher) {
+           moviesServiceRequest.getLatestMovies()
+       }
+    }
 
+    override suspend fun getComingMovies(): ApiResponse<Movies> {
+       return withContext(dispatcher) {
+           moviesServiceRequest.getUpComingMovies()
+       }
+    }
+
+    override suspend fun getTopRatedMovies(): ApiResponse<Movies> {
+       return withContext(dispatcher) {
+           moviesServiceRequest.getTopRatedMovies()
+       }
+    }
+
+    override suspend fun getNowPlayingMovies(): ApiResponse<Movies> {
+       return withContext(dispatcher) {
+            moviesServiceRequest.getNowPlayingMovies()
         }
     }
 }

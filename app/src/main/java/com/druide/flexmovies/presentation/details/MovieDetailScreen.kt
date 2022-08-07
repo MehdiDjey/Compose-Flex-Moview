@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
@@ -26,24 +25,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.druide.flexmovies.common.Resource
-import com.druide.flexmovies.common.component.DefaultSpacer
-import com.druide.flexmovies.common.component.ExtraSmallSpacer
+import com.druide.flexmovies.common.component.*
+import com.druide.flexmovies.common.navigation.FlexMoviesScreens
+import com.druide.flexmovies.domain.model.Cast
 import com.druide.flexmovies.domain.model.Credit
 import com.druide.flexmovies.domain.model.Movie
+import com.druide.flexmovies.domain.model.Movies
 import com.druide.flexmovies.formattedBackDropPath
-import com.druide.flexmovies.formattedPosterPath
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -56,11 +53,13 @@ fun MovieDetailScreen(
     val context = LocalContext.current
     val movieState by movieDetailViewModel.movieDetailState.collectAsState(Resource.Empty)
     val creditState by movieDetailViewModel.movieCastState.collectAsState(Resource.Empty)
+    val similarMovieState by movieDetailViewModel.movieSimilarState.collectAsState(Resource.Empty)
 
     LaunchedEffect(true) {
         if (int != null) {
             movieDetailViewModel.getMovieDetail(int)
             movieDetailViewModel.getMovieCast()
+            movieDetailViewModel.getSimilarMovies()
         }
     }
 
@@ -71,18 +70,18 @@ fun MovieDetailScreen(
             is Resource.Error -> {}
             Resource.Loading -> {}
             is Resource.Success -> {
-                DetailsContent((movieState as Resource.Success).data as Movie, creditState)
+                DisplayDetailsContent((movieState as Resource.Success).data as Movie, creditState, similarMovieState, navController)
             }
         }
     }
 }
 
 @Composable
-fun DetailsContent(movie: Movie, creditState: Resource) {
+fun DisplayDetailsContent(movie: Movie, creditState: Resource, similarMovieState: Resource, navController: NavHostController) {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .background(MaterialTheme.colorScheme.background)
+            .background(colorScheme.background)
     ) {
         DetailsHeader(
             imgSrc = movie.backdropPath?.formattedBackDropPath()!!,
@@ -104,6 +103,10 @@ fun DetailsContent(movie: Movie, creditState: Resource) {
         DefaultSpacer()
 
         Cast(creditState)
+
+        DefaultSpacer()
+
+        SimilarMovies(similarMovieState = similarMovieState , navController)
 
         DefaultSpacer()
 
@@ -239,35 +242,8 @@ fun Cast(creditState: Resource) {
                     style = typography.titleMedium,
                     color = colorScheme.onBackground
                 )
-
                 ExtraSmallSpacer()
-
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    items(items = cast, itemContent = {
-                        Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                            AsyncImage(
-                                model = ImageRequest.Builder(LocalContext.current)
-                                    .data(it.profilePath?.formattedPosterPath())
-                                    .crossfade(true)
-                                    .build(),
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .size(64.dp)
-                                    .clip(CircleShape)
-                                    .align(Alignment.CenterHorizontally),
-                            )
-
-                            DefaultSpacer()
-                            Text(
-                                text = it.name?.replace(" ", "\n") ?: "",
-                                textAlign = TextAlign.Center, style = typography.labelSmall,
-                                color = colorScheme.onSurfaceVariant
-                            )
-                        }
-                    })
-
-                }
+              DisplayCast(cast, Modifier.align(Alignment.CenterHorizontally))
             }
 
         }
@@ -277,10 +253,18 @@ fun Cast(creditState: Resource) {
 
 
 @Composable
+fun DisplayCast(cast: List<Cast>, modifier: Modifier = Modifier) {
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        items(items = cast, itemContent = {
+            RoundedItem( it , modifier = modifier)
+        })
+    }
+}
+
+
+@Composable
 fun DetailsActions() {
-    val mainButtonColor = ButtonDefaults.buttonColors(
-        contentColor = colorScheme.onSurface
-    )
+
     Row(
         modifier = Modifier
             .padding(12.dp)
@@ -291,7 +275,9 @@ fun DetailsActions() {
 
         Button(
             onClick = { /*TODO*/ },
-            modifier = Modifier.weight(1f).height(60.dp),
+            modifier = Modifier
+                .weight(1f)
+                .height(60.dp),
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorScheme.primary
@@ -307,7 +293,9 @@ fun DetailsActions() {
 
         Button(
             onClick = { /*TODO*/ },
-            modifier = Modifier.weight(1F).height(60.dp),
+            modifier = Modifier
+                .weight(1F)
+                .height(60.dp),
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorScheme.primary
@@ -319,5 +307,30 @@ fun DetailsActions() {
                 style = typography.titleMedium.copy(color = colorScheme.onPrimary)
             )
         }
+    }
+}
+
+
+@Composable
+fun SimilarMovies(similarMovieState: Resource, navController: NavHostController) {
+
+    when(similarMovieState) {
+        Resource.Empty -> {}
+        is Resource.Error -> {}
+        Resource.Loading ->{}
+        is Resource.Success ->  {
+            DisplaySimilarMovies(similarMovieState.data as Movies, navController)
+        }
+    }
+}
+
+@Composable
+fun DisplaySimilarMovies(movies: Movies, navController: NavHostController) {
+    SectionItemByCategory(
+        categoryTitle = "Who might interest you",
+        movies = movies
+    ) {
+        navController.navigate(FlexMoviesScreens.MovieDetailScreen.route + "/${it}")
+
     }
 }

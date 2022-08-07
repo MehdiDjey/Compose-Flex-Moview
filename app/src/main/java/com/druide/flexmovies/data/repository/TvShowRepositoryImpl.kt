@@ -16,17 +16,16 @@ class TvShowRepositoryImpl @Inject constructor(
 ) : TvShowRepository {
 
 
-    override suspend fun getPopularsTvShow(): ApiResponse<Movies> {
+    override suspend fun getPopularsTvShow(page : Int): ApiResponse<Movies> {
     return withContext(dispatcher) {
-        tvShowService.getPopularTvShow()
+        tvShowService.getPopularTvShow(page)
     }
     }
 
-    override suspend fun getAllTvShow(page: Int)  : ApiResponse<Movies>{
-    return withContext(dispatcher) {
-        tvShowService.getAllTvShow(page)
+    override suspend fun getAllTvShow(page: Int): ApiResponse<Movies> {
+        TODO("Not yet implemented")
     }
-    }
+
 
     override suspend fun getTvShow(idShow: Int): ApiResponse<Movie> {
         return  withContext(dispatcher) {

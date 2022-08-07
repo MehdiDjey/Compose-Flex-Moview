@@ -1,6 +1,7 @@
 package com.druide.flexmovies.domain.model
 
 import android.os.Parcelable
+import com.druide.flexmovies.common.Utils.json
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Contextual
@@ -68,8 +69,10 @@ data class Movie(
 
 ) : Parcelable {
 
+
+
     override fun toString(): String {
-        return Json{ignoreUnknownKeys = true}.encodeToString(this)
+        return json.encodeToString(this)
     }
 }
 
@@ -83,7 +86,7 @@ data class Genres(
 
 ) : Parcelable {
     override fun toString(): String {
-        return Json{ignoreUnknownKeys = true}.encodeToString(this)
+        return json.encodeToString(this)
     }
 }
 
@@ -102,7 +105,7 @@ data class ProductionCompanies(
 
 ) : Parcelable {
     override fun toString(): String {
-        return Json{ignoreUnknownKeys = true}.encodeToString(this)
+        return json.encodeToString(this)
     }
 }
 
@@ -116,7 +119,7 @@ data class ProductionCountries(
 
 ) : Parcelable {
     override fun toString(): String {
-        return Json{ignoreUnknownKeys = true}.encodeToString(this)
+        return json.encodeToString(this)
     }
 }
 
@@ -132,7 +135,7 @@ data class SpokenLanguages(
 
 ) : Parcelable {
     override fun toString(): String {
-        return Json{ignoreUnknownKeys = true}.encodeToString(this)
+        return json.encodeToString(this)
     }
 }
 
@@ -146,6 +149,6 @@ data class BelongsToCollection(
     @SerialName("backdrop_path") val backdrop_path: String
 ) : Parcelable {
     override fun toString(): String {
-        return Json{ignoreUnknownKeys = true}.encodeToString(this)
+        return json.encodeToString(this)
     }
 }

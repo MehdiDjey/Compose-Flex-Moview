@@ -1,6 +1,6 @@
 package com.druide.flexmovies.di
 
-import com.druide.flexmovies.data.remote.MoviesService
+import com.druide.flexmovies.data.remote.MoviesServiceRequest
 import com.druide.flexmovies.data.remote.TvShowService
 import dagger.Module
 import dagger.Provides
@@ -15,8 +15,8 @@ class ServiceModule {
 
     @Singleton
     @Provides
-    fun Retrofit.provideMoviesService () : MoviesService =
-        this.create(MoviesService::class.java)
+    fun Retrofit.provideMoviesService () : MoviesServiceRequest =
+        this.create(MoviesServiceRequest::class.java)
 
     @Singleton
     @Provides

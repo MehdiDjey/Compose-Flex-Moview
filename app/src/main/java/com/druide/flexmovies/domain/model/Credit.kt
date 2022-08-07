@@ -54,6 +54,6 @@ data class Cast(
 ) : Parcelable {
 
     override fun toString(): String {
-        return Json.encodeToString(this)
+        return json.encodeToString(this)
     }
 }

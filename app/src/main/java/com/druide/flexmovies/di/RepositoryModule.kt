@@ -1,6 +1,6 @@
 package com.druide.flexmovies.di
 
-import com.druide.flexmovies.data.remote.MoviesService
+import com.druide.flexmovies.data.remote.MoviesServiceRequest
 import com.druide.flexmovies.data.remote.TvShowService
 import com.druide.flexmovies.data.repository.MoviesRepositoryImpl
 import com.druide.flexmovies.data.repository.TvShowRepositoryImpl
@@ -19,7 +19,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun MoviesService.provideMoviesRepository(): MoviesRepository {
+    fun MoviesServiceRequest.provideMoviesRepository(): MoviesRepository {
         return MoviesRepositoryImpl(this)
     }
 
