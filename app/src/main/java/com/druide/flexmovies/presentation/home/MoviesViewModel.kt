@@ -4,13 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.druide.flexmovies.common.Resource
 import com.druide.flexmovies.domain.movies.MoviesUseCase
-import com.druide.flexmovies.domain.tvShow.TvShowUseCase
 import com.skydoves.sandwich.message
 import com.skydoves.sandwich.onError
 import com.skydoves.sandwich.onException
 import com.skydoves.sandwich.onSuccess
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -85,7 +83,6 @@ class MoviesViewModel @Inject constructor(private val moviesUseCase: MoviesUseCa
 
     private fun getTopRatedMovies() {
         _topRatedState.value = Resource.Loading
-
         viewModelScope.launch {
             val response = moviesUseCase.getTopRated()
 

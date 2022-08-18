@@ -1,26 +1,27 @@
 package com.druide.flexmovies.presentation.home
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
+import androidx.compose.material.ScrollableTabRow
+import androidx.compose.material.Tab
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.druide.flexmovies.common.Resource
-import com.druide.flexmovies.common.component.SectionItemByCategory
 import com.druide.flexmovies.common.component.SectionItemByCategoryWithAction
 import com.druide.flexmovies.common.navigation.FlexMoviesScreens
+import com.druide.flexmovies.common.navigation.TabsItem
 import com.druide.flexmovies.domain.model.Movies
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
+import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
 
 
@@ -30,13 +31,83 @@ fun HomeScreen(navController: NavHostController, moviesViewModel: MoviesViewMode
     Scaffold(
         backgroundColor = MaterialTheme.colorScheme.surface
     ) { paddingValues ->
-        MainContent(
+     /*   MainContent(
             navController = navController,
             moviesViewModel,
             paddingValues
-        )
+        )*/
+
+        SectionTabScreen(paddingValues)
     }
 
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun SectionTabScreen(paddingValues: PaddingValues) {
+
+    val tabs = listOf(
+        TabsItem.MoviesScreen,
+        TabsItem.TvShowScreen,
+        TabsItem.AnimeScreen,
+        TabsItem.MyListScreen,
+        )
+
+    val pagerState = rememberPagerState()
+
+
+        Column {
+            Tabs(tabs = tabs, pagerState = pagerState)
+            TabsContent(tabs = tabs, pagerState = pagerState)
+        }
+
+}
+
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun Tabs(tabs: List<TabsItem>, pagerState: PagerState) {
+    val scope = rememberCoroutineScope()
+    // OR ScrollableTabRow()
+    ScrollableTabRow(
+        modifier = Modifier.fillMaxWidth(),
+        selectedTabIndex = pagerState.currentPage,
+        backgroundColor = MaterialTheme.colorScheme.background,
+//        contentColor = Color.White,
+        edgePadding = 0.dp,
+        indicator = { tabPositions ->
+            androidx.compose.material.TabRowDefaults.Indicator(
+                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+            )
+        }){
+
+        tabs.forEachIndexed { index, tab ->
+            // OR LeadingIconTab()
+
+            Tab(
+                text = {
+                    Text(
+                        text = tab.title,
+                        fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )},
+                selected = pagerState.currentPage == index,
+                onClick = {
+                    scope.launch {
+                        pagerState.animateScrollToPage(index)
+                    }
+                },
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun TabsContent(tabs: List<TabsItem>, pagerState: PagerState) {
+    HorizontalPager(state = pagerState, count = tabs.size) { page ->
+        tabs[page].screen()
+    }
 }
 
 
@@ -166,6 +237,7 @@ fun PopularShow(moviesViewModel: MoviesViewModel, navController: NavHostControll
 
 @Composable
 fun DisplaySectionContent(movies: Movies, navController: NavHostController, title: String) {
+
 
     val context = LocalContext.current
     SectionItemByCategoryWithAction(title, movies, 
