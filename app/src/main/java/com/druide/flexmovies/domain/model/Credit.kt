@@ -2,7 +2,6 @@ package com.druide.flexmovies.domain.model
 
 import android.os.Parcelable
 import com.druide.flexmovies.common.Utils.json
-import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

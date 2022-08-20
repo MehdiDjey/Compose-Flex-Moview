@@ -90,10 +90,10 @@ fun FlexMoviesTheme(
         else -> LightColors
     }
 
-  MaterialTheme(
+    MaterialTheme(
         colorScheme = colorScheme,
         content = content,
-      typography = AppTypography
+        typography = AppTypography
     )
 }
 

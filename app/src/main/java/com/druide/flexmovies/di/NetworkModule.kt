@@ -12,7 +12,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -63,7 +62,7 @@ object NetworkModule {
     ): Retrofit {
         val contentType = "application/json".toMediaType()
 
-        val converterFactory = Json{ignoreUnknownKeys = true}.asConverterFactory(contentType)
+        val converterFactory = Json { ignoreUnknownKeys = true }.asConverterFactory(contentType)
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)

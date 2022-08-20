@@ -1,9 +1,10 @@
-package com.druide.flexmovies.presentation.home
+package com.druide.flexmovies.presentation.home.tvShow
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.druide.flexmovies.common.Resource
-import com.druide.flexmovies.domain.movies.MoviesUseCase
+import com.druide.flexmovies.common.utils.awaitAll
+import com.druide.flexmovies.domain.tvShow.TvShowUseCase
 import com.skydoves.sandwich.message
 import com.skydoves.sandwich.onError
 import com.skydoves.sandwich.onException
@@ -16,55 +17,44 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MoviesViewModel @Inject constructor(private val moviesUseCase: MoviesUseCase) : ViewModel() {
+class TvShowViewModel @Inject constructor( private val tvShowUseCase: TvShowUseCase) : ViewModel() {
 
     private val _popularState = MutableStateFlow<Resource>(Resource.Empty)
-    val popularState: StateFlow<Resource> = _popularState
-
-
-    private val _nowPlayingState = MutableStateFlow<Resource>(Resource.Empty)
-    val nowPlayingState: StateFlow<Resource> = _nowPlayingState
+    val popularState :StateFlow<Resource> = _popularState
 
 
     private val _topRatedState = MutableStateFlow<Resource>(Resource.Empty)
-    val topRatedState: StateFlow<Resource> = _topRatedState
+    val topRated :StateFlow<Resource>  = _topRatedState
 
 
-    private val _upComingState = MutableStateFlow<Resource>(Resource.Empty)
-    val upComingState: StateFlow<Resource> = _upComingState
+    private val _latestState  = MutableStateFlow<Resource>(Resource.Empty)
+    val latestState : StateFlow<Resource> = _latestState
+
+    private val _onTheAirState  = MutableStateFlow<Resource>(Resource.Empty)
+    val onTheAirState : StateFlow<Resource> = _onTheAirState
+
+    private val _todayAiringState  = MutableStateFlow<Resource>(Resource.Empty)
+    val todayAiringState : StateFlow<Resource> = _todayAiringState
 
 
-    private val _latestState = MutableStateFlow<Resource>(Resource.Empty)
-    val latestState: StateFlow<Resource> = _latestState
 
 
-  /*  private val _tvShowState = MutableStateFlow<Resource>(Resource.Empty)
-    val tvShowState: StateFlow<Resource> = _tvShowState*/
-
-
-
-    suspend fun awaitAll(vararg blocks: suspend () -> Unit) = coroutineScope {
-        blocks.forEach {
-            launch { it() }
-        }
-    }
-
-    suspend fun getAllMoviesContent() = coroutineScope {
+    suspend fun getAllTvShowContent() = coroutineScope {
         awaitAll(
-            ::getPopularMovies,
-            ::getTopRatedMovies,
-            ::getNowPlayingMovies,
-            ::getUpComingMovies,
-            ::getLatestMovies
+            ::getPopularTvShow,
+            ::getTopRatedTvShow,
+            ::getOnTheAirTvShow,
+            ::getTodayAiringTvShow,
+            ::getLatestTvShow
         )
     }
 
 
-    private fun getPopularMovies() {
+    private fun getPopularTvShow() {
         _popularState.value = Resource.Loading
 
         viewModelScope.launch {
-            val response = moviesUseCase.getPopulars()
+            val response = tvShowUseCase.getPopular()
 
             response.onSuccess {
                 if (this.statusCode.code == 200 && this.response.isSuccessful) {
@@ -79,12 +69,13 @@ class MoviesViewModel @Inject constructor(private val moviesUseCase: MoviesUseCa
                 _popularState.value = Resource.Error(this.message())
             }
         }
+
     }
 
-    private fun getTopRatedMovies() {
+    private fun getTopRatedTvShow () {
         _topRatedState.value = Resource.Loading
         viewModelScope.launch {
-            val response = moviesUseCase.getTopRated()
+            val response = tvShowUseCase.getTopRated()
 
             response.onSuccess {
                 if (this.statusCode.code == 200 && this.response.isSuccessful) {
@@ -99,55 +90,56 @@ class MoviesViewModel @Inject constructor(private val moviesUseCase: MoviesUseCa
                 _topRatedState.value = Resource.Error(this.message())
             }
         }
+
     }
 
-    private fun getNowPlayingMovies() {
-        _nowPlayingState.value = Resource.Loading
-
+    private fun getOnTheAirTvShow() {
+        _onTheAirState.value = Resource.Loading
         viewModelScope.launch {
-            val response = moviesUseCase.getNowPlaying()
+            val response = tvShowUseCase.getOnTheAir()
 
             response.onSuccess {
                 if (this.statusCode.code == 200 && this.response.isSuccessful) {
-                    _nowPlayingState.value = Resource.Success(data)
+                    _onTheAirState.value = Resource.Success(data)
                 }
             }
             response.onError {
-                _nowPlayingState.value = Resource.Error(this.message())
+                _onTheAirState.value = Resource.Error(this.message())
             }
 
             response.onException {
-                _nowPlayingState.value = Resource.Error(this.message())
+                _onTheAirState.value = Resource.Error(this.message())
             }
         }
+
+
     }
 
-    private fun getUpComingMovies() {
-        _upComingState.value = Resource.Loading
-
+    private fun getTodayAiringTvShow() {
+        _todayAiringState.value = Resource.Loading
         viewModelScope.launch {
-            val response = moviesUseCase.getUpcoming()
+            val response = tvShowUseCase.getTodayAiring()
 
             response.onSuccess {
                 if (this.statusCode.code == 200 && this.response.isSuccessful) {
-                    _upComingState.value = Resource.Success(data)
+                    _todayAiringState.value = Resource.Success(data)
                 }
             }
             response.onError {
-                _upComingState.value = Resource.Error(this.message())
+                _todayAiringState.value = Resource.Error(this.message())
             }
 
             response.onException {
-                _upComingState.value = Resource.Error(this.message())
+                _todayAiringState.value = Resource.Error(this.message())
             }
         }
+
     }
 
-    private fun getLatestMovies() {
+    private fun getLatestTvShow() {
         _latestState.value = Resource.Loading
-
         viewModelScope.launch {
-            val response = moviesUseCase.getLatest()
+            val response = tvShowUseCase.getLatest()
 
             response.onSuccess {
                 if (this.statusCode.code == 200 && this.response.isSuccessful) {
@@ -163,26 +155,5 @@ class MoviesViewModel @Inject constructor(private val moviesUseCase: MoviesUseCa
             }
         }
     }
-
-/*    fun getPopularTvShow() {
-        _tvShowState.value = Resource.Loading
-
-        viewModelScope.launch {
-            val response = tvShowUseCase.getPopular()
-
-            response.onSuccess {
-                if (this.statusCode.code == 200 && this.response.isSuccessful) {
-                    _tvShowState.value = Resource.Success(data)
-                }
-            }
-            response.onError {
-                _tvShowState.value = Resource.Error(this.message())
-            }
-
-            response.onException {
-                _tvShowState.value = Resource.Error(this.message())
-            }
-        }
-    }*/
 
 }

@@ -15,9 +15,12 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -34,8 +37,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.druide.flexmovies.common.Resource
-import com.druide.flexmovies.common.component.*
-import com.druide.flexmovies.common.navigation.FlexMoviesScreens
+import com.druide.flexmovies.common.component.DefaultSpacer
+import com.druide.flexmovies.common.component.ExtraSmallSpacer
+import com.druide.flexmovies.common.component.RoundedItem
+import com.druide.flexmovies.common.component.SectionItemByCategory
+import com.druide.flexmovies.common.navigation.HomeScreens
 import com.druide.flexmovies.domain.model.Cast
 import com.druide.flexmovies.domain.model.Credit
 import com.druide.flexmovies.domain.model.Movie
@@ -45,7 +51,7 @@ import com.druide.flexmovies.formattedBackDropPath
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MovieDetailScreen(
+fun ContentDetailScreen(
     navController: NavHostController,
     int: Int?,
     movieDetailViewModel: MovieDetailViewModel
@@ -70,14 +76,24 @@ fun MovieDetailScreen(
             is Resource.Error -> {}
             Resource.Loading -> {}
             is Resource.Success -> {
-                DisplayDetailsContent((movieState as Resource.Success).data as Movie, creditState, similarMovieState, navController)
+                DisplayDetailsContent(
+                    (movieState as Resource.Success).data as Movie,
+                    creditState,
+                    similarMovieState,
+                    navController
+                )
             }
         }
     }
 }
 
 @Composable
-fun DisplayDetailsContent(movie: Movie, creditState: Resource, similarMovieState: Resource, navController: NavHostController) {
+fun DisplayDetailsContent(
+    movie: Movie,
+    creditState: Resource,
+    similarMovieState: Resource,
+    navController: NavHostController
+) {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
@@ -106,7 +122,7 @@ fun DisplayDetailsContent(movie: Movie, creditState: Resource, similarMovieState
 
         DefaultSpacer()
 
-        SimilarMovies(similarMovieState = similarMovieState , navController)
+        SimilarMovies(similarMovieState = similarMovieState, navController)
 
         DefaultSpacer()
 
@@ -243,7 +259,7 @@ fun Cast(creditState: Resource) {
                     color = colorScheme.onBackground
                 )
                 ExtraSmallSpacer()
-              DisplayCast(cast, Modifier.align(Alignment.CenterHorizontally))
+                DisplayCast(cast, Modifier.align(Alignment.CenterHorizontally))
             }
 
         }
@@ -256,7 +272,7 @@ fun Cast(creditState: Resource) {
 fun DisplayCast(cast: List<Cast>, modifier: Modifier = Modifier) {
     LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         items(items = cast, itemContent = {
-            RoundedItem( it , modifier = modifier)
+            RoundedItem(it, modifier = modifier)
         })
     }
 }
@@ -314,11 +330,11 @@ fun DetailsActions() {
 @Composable
 fun SimilarMovies(similarMovieState: Resource, navController: NavHostController) {
 
-    when(similarMovieState) {
+    when (similarMovieState) {
         Resource.Empty -> {}
         is Resource.Error -> {}
-        Resource.Loading ->{}
-        is Resource.Success ->  {
+        Resource.Loading -> {}
+        is Resource.Success -> {
             DisplaySimilarMovies(similarMovieState.data as Movies, navController)
         }
     }
@@ -330,7 +346,7 @@ fun DisplaySimilarMovies(movies: Movies, navController: NavHostController) {
         categoryTitle = "Who might interest you",
         movies = movies
     ) {
-        navController.navigate(FlexMoviesScreens.MovieDetailScreen.route + "/${it}")
+        navController.navigate(HomeScreens.DetailContentScreen.route + "/${it}")
 
     }
 }

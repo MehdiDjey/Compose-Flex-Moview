@@ -3,7 +3,6 @@ package com.druide.flexmovies.presentation.details
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.druide.flexmovies.common.Resource
-import com.druide.flexmovies.domain.model.Movies
 import com.druide.flexmovies.domain.movies.MoviesUseCase
 import com.druide.flexmovies.domain.tvShow.TvShowUseCase
 import com.skydoves.sandwich.message
@@ -17,11 +16,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieDetailViewModel @Inject constructor(private val moviesUseCase: MoviesUseCase, private val tvShowUseCase: TvShowUseCase) :ViewModel() {
+class MovieDetailViewModel @Inject constructor(
+    private val moviesUseCase: MoviesUseCase
+) : ViewModel() {
 
     private val _movieDetailState = MutableStateFlow<Resource>(Resource.Empty)
     val movieDetailState: StateFlow<Resource> = _movieDetailState
-
 
     private val _movieSimilarState = MutableStateFlow<Resource>(Resource.Empty)
     val movieSimilarState: StateFlow<Resource> = _movieSimilarState
@@ -30,13 +30,9 @@ class MovieDetailViewModel @Inject constructor(private val moviesUseCase: Movies
     val movieCastState: StateFlow<Resource> = _movieCastState
 
 
-    private val _tvShowDetailState = MutableStateFlow<Resource>(Resource.Empty)
-    val tvShowDetailState: StateFlow<Resource> = _tvShowDetailState
-
-
     private var movieId = -1
 
-    fun getMovieDetail(idMovie : Int) {
+    fun getMovieDetail(idMovie: Int) {
         movieId = idMovie
         _movieDetailState.value = Resource.Loading
 
@@ -69,11 +65,11 @@ class MovieDetailViewModel @Inject constructor(private val moviesUseCase: Movies
             }
 
             response.onError {
-                _movieCastState.value =  Resource.Error(this.message())
+                _movieCastState.value = Resource.Error(this.message())
             }
 
             response.onException {
-                _movieCastState.value =   Resource.Error(this.message())
+                _movieCastState.value = Resource.Error(this.message())
             }
         }
 
@@ -91,12 +87,12 @@ class MovieDetailViewModel @Inject constructor(private val moviesUseCase: Movies
             }
 
             response.onError {
-                _movieSimilarState.value  = Resource.Error(this.message())
+                _movieSimilarState.value = Resource.Error(this.message())
 
             }
 
             response.onException {
-                _movieSimilarState.value  = Resource.Error(this.message())
+                _movieSimilarState.value = Resource.Error(this.message())
             }
         }
 

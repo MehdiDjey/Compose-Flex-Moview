@@ -1,5 +1,6 @@
 package com.druide.flexmovies.domain.tvShow
 
+import com.druide.flexmovies.common.Constant
 import com.druide.flexmovies.domain.model.Credit
 import com.druide.flexmovies.domain.model.Movie
 import com.druide.flexmovies.domain.model.Movies
@@ -12,7 +13,7 @@ import javax.inject.Inject
  * @property tvShowRepository
  * @constructor Create empty Tv show use case
  */
-class TvShowUseCase @Inject constructor(private val tvShowRepository: TvShowRepository) {
+class TvShowUseCase @Inject constructor(private val repository: TvShowRepository) {
 
     /**
      * Get popular
@@ -21,8 +22,8 @@ class TvShowUseCase @Inject constructor(private val tvShowRepository: TvShowRepo
      *
      * @return
      */
-    suspend fun getPopular(page : Int =1): ApiResponse<Movies> {
-        return tvShowRepository.getPopularsTvShow(page)
+    suspend fun getPopular(): ApiResponse<Movies> {
+        return repository.popular(Constant.DEFAULT_START_PAGE)
     }
 
     /**
@@ -34,7 +35,7 @@ class TvShowUseCase @Inject constructor(private val tvShowRepository: TvShowRepo
      * @return
      */
     suspend fun getAllTvShowAt(page: Int): ApiResponse<Movies> {
-        return tvShowRepository.getAllTvShow(page)
+        return repository.popular(page)
     }
 
     /**
@@ -46,7 +47,7 @@ class TvShowUseCase @Inject constructor(private val tvShowRepository: TvShowRepo
      * @return
      */
     suspend fun getDetails(tvShowId: Int): ApiResponse<Movie> {
-        return tvShowRepository.getTvShow(tvShowId)
+        return repository.details(tvShowId)
     }
 
     /**
@@ -57,8 +58,8 @@ class TvShowUseCase @Inject constructor(private val tvShowRepository: TvShowRepo
      * @param tvShowId
      * @return
      */
-    suspend fun getCredit(tvShowId: Int): ApiResponse<Credit>? {
-        return null
+    suspend fun getCredit(tvShowId: Int): ApiResponse<Credit> {
+        return repository.credit(tvShowId)
     }
 
     /**
@@ -69,8 +70,8 @@ class TvShowUseCase @Inject constructor(private val tvShowRepository: TvShowRepo
      * @param tvShowId
      * @return
      */
-    suspend fun getSimilar(tvShowId: Int): ApiResponse<Movies>? {
-        return null
+    suspend fun getSimilar(tvShowId: Int): ApiResponse<Movies> {
+        return repository.similar(tvShowId)
     }
 
     /**
@@ -80,9 +81,8 @@ class TvShowUseCase @Inject constructor(private val tvShowRepository: TvShowRepo
      *
      * @return
      */
-    suspend fun getLatest(): ApiResponse<Movies>? {
-        // TODO: add repo call
-        return null
+    suspend fun getLatest(): ApiResponse<Movies> {
+        return repository.latest()
     }
 
 
@@ -93,8 +93,8 @@ class TvShowUseCase @Inject constructor(private val tvShowRepository: TvShowRepo
      *
      * @return
      */
-    suspend fun getTopRated(): ApiResponse<Movies>? {
-        return null
+    suspend fun getTopRated(): ApiResponse<Movies> {
+        return repository.topRated()
     }
 
 
@@ -105,8 +105,8 @@ class TvShowUseCase @Inject constructor(private val tvShowRepository: TvShowRepo
      *
      * @return
      */
-    suspend fun getOnTheAir(): Result<Movies>? {
-        return null
+    suspend fun getOnTheAir(): ApiResponse<Movies> {
+        return repository.onAir()
     }
 
     /**
@@ -116,19 +116,8 @@ class TvShowUseCase @Inject constructor(private val tvShowRepository: TvShowRepo
      *
      * @return
      */
-    suspend fun getTodayAiring(): Result<Movies>? {
-        return null
+    suspend fun getTodayAiring(): ApiResponse<Movies> {
+        return repository.todayAiring()
     }
 
-    /**
-     * Get recommendations
-     *
-     * Get the list of TV show recommendations for this item.
-     *
-     *@param tvShowId
-     * @return
-     */
-    suspend fun getRecommendations(tvShowId: Int): Result<Movies>? {
-        return null
-    }
 }

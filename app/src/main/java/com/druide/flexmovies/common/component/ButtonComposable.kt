@@ -1,7 +1,6 @@
 package com.druide.flexmovies.common.component
 
 import android.graphics.drawable.Icon
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -13,7 +12,7 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun MovieButtonAction(modifier: Modifier =Modifier, icon: Icon, textContent : String) {
+fun MovieButtonAction(modifier: Modifier = Modifier, icon: Icon, textContent: String) {
     Button(
         onClick = { /*TODO*/ },
         modifier = modifier,

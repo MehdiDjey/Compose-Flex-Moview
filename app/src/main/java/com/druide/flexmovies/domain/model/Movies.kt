@@ -6,7 +6,6 @@ import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 @Parcelize
 @Serializable
@@ -29,7 +28,7 @@ data class Movies(
 @Parcelize
 @Serializable
 data class Results(
-    @SerialName("adult") val adult: Boolean?= null,
+    @SerialName("adult") val adult: Boolean? = null,
 
     @SerialName("backdrop_path") val backdropPath: String?,
 
@@ -45,23 +44,23 @@ data class Results(
 
     @SerialName("popularity") val popularity: Double,
 
-    @SerialName("poster_path") val posterPath: String?= null,
+    @SerialName("poster_path") val posterPath: String? = null,
 
     @SerialName("release_date") val releaseDate: String? = null,
 
     @SerialName("title") val title: String? = null,
 
-    @SerialName("video") val video: Boolean?= null,
+    @SerialName("video") val video: Boolean? = null,
 
     @SerialName("vote_average") val voteAverage: Double,
 
     @SerialName("vote_count") val voteCount: Int,
 
-   @SerialName("original_name") val originalName : String?  = null,
+    @SerialName("original_name") val originalName: String? = null,
 
-   @SerialName("name") val name : String?  = null,
+    @SerialName("name") val name: String? = null,
 
-) : Parcelable {
+    ) : Parcelable {
     override fun toString(): String {
         return json.encodeToString(this)
     }

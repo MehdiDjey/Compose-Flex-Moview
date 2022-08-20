@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <bool name="lightNavEnabled">true</bool>
+
     <style name="Theme.FlexMovies" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="android:statusBarColor">@color/bg</item>
         <item name="colorPrimary">@color/bg</item>
         <item name="colorPrimaryVariant">@color/bg</item>
         <item name="colorOnPrimary">@color/white</item>
-        <item name="android:windowLightStatusBar" >@bool/lightNavEnabled</item>
+        <item name="android:windowLightStatusBar">@bool/lightNavEnabled</item>
         <item name="android:navigationBarColor" tools:targetApi="o">?colorSurface</item>
-        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">@bool/lightNavEnabled</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">@bool/lightNavEnabled
+        </item>
     </style>
 </resources>

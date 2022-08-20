@@ -5,7 +5,6 @@ import com.druide.flexmovies.domain.model.Credit
 import com.druide.flexmovies.domain.model.Movie
 import com.druide.flexmovies.domain.model.Movies
 import com.skydoves.sandwich.ApiResponse
-import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 /**
@@ -26,7 +25,7 @@ class MoviesUseCase @Inject constructor(private val moviesRepository: MoviesRepo
         return moviesRepository.getPopularMovies(Constant.DEFAULT_START_PAGE)
     }
 
-    suspend fun getPopularAt(page: Int) : ApiResponse<Movies> {
+    suspend fun getPopularAt(page: Int): ApiResponse<Movies> {
         return moviesRepository.getPopularMovies(page)
 
     }
@@ -63,8 +62,8 @@ class MoviesUseCase @Inject constructor(private val moviesRepository: MoviesRepo
      * @param movieId
      * @return
      */
-    suspend fun getSimilar(movieId: Int) : ApiResponse<Movies> {
-        return  moviesRepository.getSimilarMovies(movieId)
+    suspend fun getSimilar(movieId: Int): ApiResponse<Movies> {
+        return moviesRepository.getSimilarMovies(movieId)
     }
 
     /**
@@ -74,8 +73,8 @@ class MoviesUseCase @Inject constructor(private val moviesRepository: MoviesRepo
      *
      * @return
      */
-    suspend fun  getLatest() : ApiResponse<Movies> {
-        return  moviesRepository.getLatestMovies()
+    suspend fun getLatest(): ApiResponse<Movies> {
+        return moviesRepository.getLatestMovies()
     }
 
     /**
@@ -85,8 +84,8 @@ class MoviesUseCase @Inject constructor(private val moviesRepository: MoviesRepo
      *
      * @return
      */
-    suspend fun  getUpcoming() : ApiResponse<Movies> {
-        return  moviesRepository.getComingMovies()
+    suspend fun getUpcoming(): ApiResponse<Movies> {
+        return moviesRepository.getComingMovies()
     }
 
     /**
@@ -96,8 +95,8 @@ class MoviesUseCase @Inject constructor(private val moviesRepository: MoviesRepo
      *
      * @return
      */
-    suspend fun getTopRated() : ApiResponse<Movies> {
-        return  moviesRepository.getTopRatedMovies()
+    suspend fun getTopRated(): ApiResponse<Movies> {
+        return moviesRepository.getTopRatedMovies()
     }
 
     /**
@@ -107,8 +106,8 @@ class MoviesUseCase @Inject constructor(private val moviesRepository: MoviesRepo
      *
      * @return
      */
-    suspend fun getNowPlaying() : ApiResponse<Movies> {
-        return  moviesRepository.getNowPlayingMovies()
+    suspend fun getNowPlaying(): ApiResponse<Movies> {
+        return moviesRepository.getNowPlayingMovies()
     }
 
 }

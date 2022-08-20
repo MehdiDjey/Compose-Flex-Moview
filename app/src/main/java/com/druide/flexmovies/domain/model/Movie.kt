@@ -2,13 +2,10 @@ package com.druide.flexmovies.domain.model
 
 import android.os.Parcelable
 import com.druide.flexmovies.common.Utils.json
-import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 @Parcelize
 @Serializable
@@ -65,10 +62,7 @@ data class Movie(
     @SerialName("vote_count") val voteCount: Int
 
 
-
-
 ) : Parcelable {
-
 
 
     override fun toString(): String {

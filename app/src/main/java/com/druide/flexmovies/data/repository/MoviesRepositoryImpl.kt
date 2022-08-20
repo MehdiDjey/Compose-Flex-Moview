@@ -16,51 +16,51 @@ class MoviesRepositoryImpl @Inject constructor(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : MoviesRepository {
 
-    override suspend fun getPopularMovies(page : Int): ApiResponse<Movies> {
+    override suspend fun getPopularMovies(page: Int): ApiResponse<Movies> {
         return withContext(dispatcher) {
-            moviesServiceRequest.getPopularMovies(page)
+            moviesServiceRequest.getPopular(page)
         }
     }
 
     override suspend fun getDetailsMovie(idMovie: Int): ApiResponse<Movie> {
         return withContext(dispatcher) {
-            moviesServiceRequest.getMovieById(idMovie)
+            moviesServiceRequest.getMovie(idMovie)
         }
     }
 
     override suspend fun getCreditMovie(idMovie: Int): ApiResponse<Credit> {
-        return  withContext(dispatcher) {
-             moviesServiceRequest.getCreditMovie(idMovie)
+        return withContext(dispatcher) {
+            moviesServiceRequest.getCredit(idMovie)
         }
     }
 
     override suspend fun getSimilarMovies(idMovie: Int): ApiResponse<Movies> {
-       return  withContext(dispatcher) {
-           moviesServiceRequest.getSimilarMovies(idMovie)
-       }
+        return withContext(dispatcher) {
+            moviesServiceRequest.getSimilar(idMovie)
+        }
     }
 
     override suspend fun getLatestMovies(): ApiResponse<Movies> {
-       return withContext(dispatcher) {
-           moviesServiceRequest.getLatestMovies()
-       }
+        return withContext(dispatcher) {
+            moviesServiceRequest.getLatest()
+        }
     }
 
     override suspend fun getComingMovies(): ApiResponse<Movies> {
-       return withContext(dispatcher) {
-           moviesServiceRequest.getUpComingMovies()
-       }
+        return withContext(dispatcher) {
+            moviesServiceRequest.getUpComing()
+        }
     }
 
     override suspend fun getTopRatedMovies(): ApiResponse<Movies> {
-       return withContext(dispatcher) {
-           moviesServiceRequest.getTopRatedMovies()
-       }
+        return withContext(dispatcher) {
+            moviesServiceRequest.getTopRated()
+        }
     }
 
     override suspend fun getNowPlayingMovies(): ApiResponse<Movies> {
-       return withContext(dispatcher) {
-            moviesServiceRequest.getNowPlayingMovies()
+        return withContext(dispatcher) {
+            moviesServiceRequest.getNowPlaying()
         }
     }
 }
